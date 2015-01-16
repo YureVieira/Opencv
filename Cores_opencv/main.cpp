@@ -1,6 +1,9 @@
 #include <iostream>
-#include <opencv.hpp>
+#include <sstream>
 #include <math.h>
+#include <string.h>
+#include <opencv.hpp>
+
 #define FAIXA_H 5
 #define FAIXA_S 15
 #define FAIXA_V 5
@@ -10,6 +13,7 @@ using namespace cv;
 
 Mat image_HSV;
 int _x,_y;
+int v1=20,v2=90,N=11;
 Vec3b color;
 
 void CallBackFunc(int event, int x, int y, int flags, void* userdata)
@@ -40,11 +44,11 @@ void CallBackFunc(int event, int x, int y, int flags, void* userdata)
 }
 void show_xy_color(Mat img,int x,int y)
 {
-        Vec3b color = img.at<Vec3b>(Point(x,y));
-        Mat M(200,200,CV_8UC3,Scalar((int)color[0],255,100));
-        cvtColor(M,M,CV_HSV2BGR);
-        imshow("Color",M);
-        cout << "color_HSV: " << color << endl;
+    Vec3b color = img.at<Vec3b>(Point(x,y));
+    Mat M(200,200,CV_8UC3,Scalar((int)color[0],255,100));
+    cvtColor(M,M,CV_HSV2BGR);
+    imshow("Color",M);
+    cout << "color_HSV: " << color << endl;
 }
 int main()
 {
@@ -61,8 +65,11 @@ int main()
     //set the callback function for any mouse event
     setMouseCallback("window", CallBackFunc, NULL);
 
-    Mat frame,aux_hsv,result;
+    Mat frame,aux_hsv,result,img_canny;;
     vector<Mat> HSV_chanells;
+
+    vector<vector<Point> > contours;
+    vector<Point> approx;
 
     for(;;)
     {
@@ -99,6 +106,40 @@ int main()
         circle(frame,Point(_x,_y),10,Scalar(100,200,230),3,1);
         show_xy_color(image_HSV,_x,_y);
 
+        /********************************************************************************************************************************/
+        Canny(result, img_canny, v1, v2);
+        findContours(img_canny,contours,CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE);
+//
+//        if(contours.size()>0 && contours.size()<5)//Se for detectado algum contorno.
+//        {
+//            //            count_frames_without_blob=0;
+//            /************************************************************
+//             * Segmentação dos blobs
+//             ***********************************************************/
+//            int blob_index=0;
+//            int blob_area=0;
+//            /***********************************************************
+//             * Separa o maior blob para segmentação
+//            ***********************************************************/
+//            for( size_t i = 0; i < contours.size(); i++ )
+//            {
+//                if(fabs(contourArea(Mat(contours[i]))) > blob_area)
+//                {
+//                    blob_area = fabs(cv::contourArea(cv::Mat(contours[i])));
+//                    blob_index = i;
+//                }
+//            }
+//
+//            approxPolyDP(contours[blob_index], approx, arcLength(Mat(contours[blob_index]), true)*0.02, true);
+//            /************************************************************
+//             * Extração do centro do blob
+//             ************************************************************/
+//            Point2f center;                                     //Variavel que recebe o centro do blob.
+//            float radius;                                           //Variavel auxiliar.
+//            minEnclosingCircle(approx,center,radius);           //Acha o centro do blob.
+//            circle( result, center, (int)radius + 10, 255/*cv::Scalar(255,200,100)*/, 1);
+//        }
+        /**************************************************************************************************************************************************/
         imshow("H",HSV_chanells[0]);
         imshow("S",HSV_chanells[1]);
         imshow("V",HSV_chanells[2]);
