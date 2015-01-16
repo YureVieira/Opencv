@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1421437112 source:/home/yure/Documentos/Projetos codeblocks/Cores_opencv/main.cpp
+	<iostream>
+	<opencv.hpp>
+
