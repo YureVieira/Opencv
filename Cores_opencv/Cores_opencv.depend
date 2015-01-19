@@ -3,8 +3,10 @@
 	<iostream>
 	<opencv.hpp>
 
-1421442167 source:/home/yure/Documentos/Projetos_codeblocks/Cores_opencv/main.cpp
+1421700709 source:/home/yure/Documentos/Projetos_codeblocks/Cores_opencv/main.cpp
 	<iostream>
-	<opencv.hpp>
+	<sstream>
 	<math.h>
+	<string.h>
+	<opencv.hpp>
 
